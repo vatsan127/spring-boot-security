@@ -4,13 +4,37 @@ Authentication (Who is the user?)
 	MultiFactor authentication combination of Knowledge and Possession based authentication.
 
 Authorization (Are they allowed to do this?)
-	Principal (currenly logged in user)
+	Principal (currently logged in user)
 	Granted Authority (Authority to perform an action)
-	Roles (Group of authorities assigned together
+	Roles (Group of authorities assigned togetherWhen a security filter processes a request, it goes to the AuthenticationManager interface, whose default implementation ProviderManager uses AuthenticationProvider interface to find the appropriate authentication provider (DaoAuthenticationProvider, JWTAuthenticationProvider, etc).
 
-Authentication Manager
-	has method authenticate()
-	use AuthenticationManagerBuilder to utilize Authentication Manager.
-	WebSecurityConfigurerAdapter
-		This is present because we can configure
-		Extend WebSecurityConfigurerAdapter class Configure takes AuthenticationManagerBuilder as args
+Flow:
+	request -> Servlet Container (Tomcat) -> Filter Chains(SecurityFilterChain - Can be Multiple Layers) -> Dispatcher Servlet -> Interceptors -> Controller
+
+Types of Authentication Filters
+	UsernamePasswordAuthenticationFilter - Handles form-based authentication
+	BasicAuthenticationFilter - Implements HTTP Basic Authentication
+	BearerTokenAuthenticationFilter - Supports JWT authentication
+
+Spring Security Flow
+	Based on the configuration a filter is selected.
+	Selected Filter will create an Authentication object.
+	Authentication Object is given to AuthenticationManager (Interface) which has default implementation ProviderManager from spring boot.
+	ProviderManager manager delegates the authentication to AuthenticationProvider.
+
+	The default AuthenticationProvider in Spring Security is DaoAuthenticationProvider. This provider:
+		Authenticates users against a database or data source
+		Uses UserDetailsService to load user information
+		Performs password validation using PasswordEncoder
+		Supports username/password authentication tokens
+		DaoAuthenticationProvider uses PasswordEncoder to compare Raw password from the authentication request with Encoded password retrieved from UserDetailsService
+
+	DaoAuthenticationProvider provies Authentication Object (True/false) to the AuthenticationManager.
+	AuthenticationManager returns back to the filter.
+	Filter stores Fully Authentication Object in the security context.
+	Security Context is added in to the request and moves to dispatcher servlet.
+
+	Implementations of UserDetailsService (Interface)
+		InMemoryUserDetailsManager (manage username/password in memory)
+		JdbcUserDetailsManager (manage username/password in db)
+
