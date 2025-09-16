@@ -1,0 +1,16 @@
+Authentication (Who is the user?)
+	Knowledge Based authentication providing password/pincode
+	Possession Based authentication handled using AccessToken, Phone / Text messages
+	MultiFactor authentication combination of Knowledge and Possession based authentication.
+
+Authorization (Are they allowed to do this?)
+	Principal (currenly logged in user)
+	Granted Authority (Authority to perform an action)
+	Roles (Group of authorities assigned together
+
+Authentication Manager
+	has method authenticate()
+	use AuthenticationManagerBuilder to utilize Authentication Manager.
+	WebSecurityConfigurerAdapter
+		This is present because we can configure
+		Extend WebSecurityConfigurerAdapter class Configure takes AuthenticationManagerBuilder as args
