@@ -6,7 +6,7 @@ Authentication (Who is the user?)
 Authorization (Are they allowed to do this?)
 	Principal (currently logged in user)
 	Granted Authority (Authority to perform an action)
-	Roles (Group of authorities assigned togetherWhen a security filter processes a request, it goes to the AuthenticationManager interface, whose default implementation ProviderManager uses AuthenticationProvider interface to find the appropriate authentication provider (DaoAuthenticationProvider, JWTAuthenticationProvider, etc).
+	Roles (Group of authorities assigned together when a security filter processes a request, it goes to the AuthenticationManager interface, whose default implementation ProviderManager uses AuthenticationProvider interface to find the appropriate authentication provider (DaoAuthenticationProvider, JWTAuthenticationProvider, etc).
 
 Flow:
 	request -> Servlet Container (Tomcat) -> Filter Chains(SecurityFilterChain - Can be Multiple Layers) -> Dispatcher Servlet -> Interceptors -> Controller
@@ -38,3 +38,11 @@ Spring Security Flow
 		InMemoryUserDetailsManager (manage username/password in memory)
 		JdbcUserDetailsManager (manage username/password in db)
 
+Form Based Login (Default & Stateful Authentication)
+	Stateful Authentication means, server maintains the user authentication state (aka Session/HTTP Session).
+	So user will don't have to provide username/password everytime with each request.
+	On successful authentication, a session (JSESSIONID) is created to maintain the user authentication state accross different requests.
+	With the subsequent requests client only passes JSESSIONID and  not username/password. And server validates it with stored JSESSIONID.
+	By default TTL for Session is 30 Minutes if it is inactive & can be customized with property server.servlet.session.timeout
+	Comes with default /login & /logout URL
+	
