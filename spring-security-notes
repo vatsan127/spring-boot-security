@@ -38,6 +38,24 @@ Spring Security Flow
 		InMemoryUserDetailsManager (manage username/password in memory)
 		JdbcUserDetailsManager (manage username/password in db)
 
+Session Creation Policy
+	IF_REQUIRED 
+		HttpSession is only created when needed(DEFAULT). 
+		For example:  
+		public api for which authentication is not required, HTTPSession will not be created if this policy will be chosen. 
+
+	ALWAYS 
+		HttpSession is always created. If already present then use it. 
+		For example:  
+		even for public api for which authentication is not required, HTTPSession will be created if this policy will be chosen. 
+
+	NEVER 
+		Do not creates a Session, but use if present. 
+
+	STATELESS 
+		No Session is created, used for Stateless applications. 
+	
+
 Form Based Login (Default & Stateful Authentication)
 	Stateful Authentication means, server maintains the user authentication state (aka Session/HTTP Session).
 	So user will don't have to provide username/password everytime with each request.
@@ -45,4 +63,24 @@ Form Based Login (Default & Stateful Authentication)
 	With the subsequent requests client only passes JSESSIONID and  not username/password. And server validates it with stored JSESSIONID.
 	By default TTL for Session is 30 Minutes if it is inactive & can be customized with property server.servlet.session.timeout
 	Comes with default /login & /logout URL
-	
+	Disadvantages 
+		Vulnerable to security issues like CSRF and session hijacking. By default CSRF is enabled for form-based login and it should not be disabled.
+		Session management is big overhead and in case of distributed system it can lead to scalability issues.
+		If there are multiple servers then we might need to store the session in DB or cache which again requires memory and lookup time. Which can cause latency issues.
+		
+		
+Basic Authentication (Stateless Authentication)
+	Stateless authentication means, server do not maintain the user authentication state.
+	client has to pass the username/password with every request using Authorization header.
+		Example: Authorization: Basic <base64(username:password)>
+	Disadvantages
+		These credentials are encoded using base64 (not encrypted), making it insecure over HTTP.
+		If credentials are compromised, then only way is to change the credentials.
+		Not suitable for large scale application, as sending credentials wit every request is an extra overhead.
+			- increased request size because of authorization header.
+			- DB Lookup to fetch user details which increase latency too.
+			- additional tasks like decoding, hasing of incoming password, 
+			
+JWT (JSON Web Token)	
+
+JWT JWE JWS

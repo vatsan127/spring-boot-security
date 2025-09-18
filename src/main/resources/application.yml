@@ -1,6 +1,17 @@
+server:
+  port: 8080
+  servlet:
+    session.timeout: 5m
+
+
 spring:
   application:
     name: spring-boot-security
 #  security:
 #    user.name: srivatsan
 #    user.password: password
+#    user.roles: USER
+
+#  session: # For storing session
+#    store-type: jdbc
+#    initialize-schema: always
